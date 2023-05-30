@@ -5,34 +5,36 @@ grammar GLang;
 program: line+ EOF
     ;
     
-line: stat NEWLINE ;
+line: semicolonStat ';' NEWLINE
+    ;
 
-stat: semicolon_stat ';';
-
-semicolon_stat: PRINT ID 
-	| num_type_def ID '=' expr
-	| ID '=' expr 
+semicolonStat: PRINT ID 
+	| numTypeDef ID ASSIGN expr
+	| ID ASSIGN expr 
 	| READ ID 
    ;
 
 expr: value
-    | value '+' expr
-    | value '*' expr
-    | value '-' expr
-    | value '/' expr
+    | value operator expr
+    ;
+    
+operator: ADD
+    | MULTIPLY
+    | SUBTRACT
+    | DIVIDE
     ;
 
 value: ID 
     | INT
     | REAL
     ;
-    
-num_type_def: 'int' | 'real';
 
-PRINT:    'print'
+numTypeDef: 'int' | 'real';
+
+PRINT:	'print' 
    ;
 
-READ:    'read'
+READ:	'read' 
    ;
 
 ID:   ('a'..'z'|'A'..'Z')+
@@ -44,8 +46,7 @@ INT:   '0'..'9'+
 REAL: [0-9]+ '.' [0-9]+
     ;
 
-NEWLINE:    '\r'? '\n'
+NEWLINE:	'\r'? '\n'
     ;
 
 WS: [ \t\n\r\f]+ -> skip ;
-
