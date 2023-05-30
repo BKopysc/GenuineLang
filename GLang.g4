@@ -26,7 +26,7 @@ value: ID
     | INT
     | REAL
     ;
-    
+
 num_type_def: 'int' | 'real';
 
 PRINT:    'print'
@@ -46,6 +46,12 @@ REAL: [0-9]+ '.' [0-9]+
 
 NEWLINE:    '\r'? '\n'
     ;
+
+ASSIGN: '=';
+ADD: '+';
+MULTIPLY: '*';
+SUBTRACT: '-';
+DIVIDE: '/';
 
 WS: [ \t\n\r\f]+ -> skip ;
 
