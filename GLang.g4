@@ -49,4 +49,10 @@ REAL: [0-9]+ '.' [0-9]+
 NEWLINE:	'\r'? '\n'
     ;
 
+ASSIGN: '=';
+ADD: '+';
+MULTIPLY: '*';
+SUBTRACT: '-';
+DIVIDE: '/';
+
 WS: [ \t\n\r\f]+ -> skip ;
