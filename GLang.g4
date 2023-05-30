@@ -26,5 +26,26 @@ value: ID
     | INT
     | REAL
     ;
+    
+num_type_def: 'int' | 'real';
 
+PRINT:    'print'
+   ;
+
+READ:    'read'
+   ;
+
+ID:   ('a'..'z'|'A'..'Z')+
+   ;
+
+INT:   '0'..'9'+
+    ;
+
+REAL: [0-9]+ '.' [0-9]+
+    ;
+
+NEWLINE:    '\r'? '\n'
+    ;
+
+WS: [ \t\n\r\f]+ -> skip ;
 
