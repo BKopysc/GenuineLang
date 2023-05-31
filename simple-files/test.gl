@@ -1,0 +1,3 @@
+int b;
+read b;
+print b;

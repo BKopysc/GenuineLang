@@ -8,20 +8,21 @@ program: line+ EOF
 line: semicolonStat ';' NEWLINE
     ;
 
-semicolonStat: PRINT ID 
-	| numTypeDef ID ASSIGN expr
-	| ID ASSIGN expr 
-	| READ ID 
+semicolonStat: PRINT ID         #print
+	| NUMTYPE ID ASSIGN expr #assignNew
+	| ID ASSIGN expr            #assign
+    | NUMTYPE ID             #declare
+	| READ ID                   #read
    ;
 
-expr: value
-    | value operator expr
+expr: value #singleExpression
+    | value operator expr #operatorExpression
     ;
     
-operator: ADD
-    | MULTIPLY
-    | SUBTRACT
-    | DIVIDE
+operator: ADD #add
+    | MULTIPLY #multiply
+    | SUBTRACT #subtract
+    | DIVIDE #divide
     ;
 
 value: ID 
@@ -29,7 +30,7 @@ value: ID
     | REAL
     ;
 
-numTypeDef: 'int' | 'real';
+NUMTYPE: 'int' | 'real';
 
 PRINT:	'print' 
    ;
