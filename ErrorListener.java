@@ -1,5 +1,5 @@
-import org.antlr.v4.runtime.;
-import org.antlr.v4.runtime.tree.;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
 
 public class ErrorListener extends BaseErrorListener {
     public static final ErrorListener INSTANCE = new ErrorListener();
