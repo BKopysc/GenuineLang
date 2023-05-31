@@ -107,6 +107,69 @@ public class LLVMActions extends GLangBaseListener {
         }
     }
 
-   
+   @Override
+    public void exitDeclare(GLangParser.DeclareContext ctx){
+        String ID = ctx.ID().getText();
+
+        String NUM_TYPE = ctx.NUMTYPE().getText().toUpperCase();
+
+        if( variables.containsKey(ID) ) {
+            error(ctx.getStart().getLine(), "variable already declared: "+ID);
+        }
+
+        Value v = new Value(ID, VarType.valueOf(NUM_TYPE), 0);
+        variables.put(ID, v);
+
+        switch(VarType.valueOf(NUM_TYPE)){
+            case INT:
+                LLVMGenerator.declare_int(ID);
+                break;
+            case REAL:
+                LLVMGenerator.declare_real(ID);
+                break;
+            default:
+                error(ctx.getStart().getLine(), "unknown type: "+NUM_TYPE);
+        }
+
+
+    }
+
+    @Override
+    public void exitPrint(GLangParser.PrintContext ctx) { 
+        String ID = ctx.ID().getText();
+        if( variables.containsKey(ID) ) {
+          Value v = variables.get( ID );
+          if( v.type != null ) {
+             if( v.type == VarType.INT ){
+                LLVMGenerator.printf_int( ID );
+             }
+             if( v.type == VarType.REAL ){
+                LLVMGenerator.printf_real( ID );
+             }
+          }
+       } else {
+          error(ctx.getStart().getLine(), "unknown variable: " +ID);
+       }
+    }
+
+    @Override
+    public void exitRead(GLangParser.ReadContext ctx) {
+       String ID = ctx.ID().getText();
+       if( ! variables.containsKey(ID) ) {
+        error(ctx.getStart().getLine(), "undeclared variable: " +ID);
+       } 
+       LLVMGenerator.scanf(ID, variables.get(ID).type);
+    } 
+
+    @Override 
+    public void exitProgram(GLangParser.ProgramContext ctx) { 
+       System.out.println( LLVMGenerator.generate() );
+    }
+
+    void error(int line, String msg){
+        String errorMsg = String.format("Compilation Error, line %s :: [%s]",line,msg);
+       System.err.println(errorMsg);
+       System.exit(1);
+   }
 
 }
