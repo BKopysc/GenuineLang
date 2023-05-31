@@ -23,7 +23,7 @@ jobs:
       uses: KyleMayes/install-llvm-action@v1.8.0
       with:
         # The version of LLVM and Clang binaries to install.
-        version: "10.0"
+        version: "14.0"
 
 
     - name: Run make
