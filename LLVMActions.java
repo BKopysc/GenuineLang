@@ -110,16 +110,16 @@ public class LLVMActions extends GLangBaseListener {
    @Override
     public void exitDeclare(GLangParser.DeclareContext ctx){
         String ID = ctx.ID().getText();
-
+ 
         String NUM_TYPE = ctx.NUMTYPE().getText().toUpperCase();
-
+ 
         if( variables.containsKey(ID) ) {
             error(ctx.getStart().getLine(), "variable already declared: "+ID);
         }
-
+ 
         Value v = new Value(ID, VarType.valueOf(NUM_TYPE), 0);
         variables.put(ID, v);
-
+ 
         switch(VarType.valueOf(NUM_TYPE)){
             case INT:
                 LLVMGenerator.declare_int(ID);
@@ -130,10 +130,10 @@ public class LLVMActions extends GLangBaseListener {
             default:
                 error(ctx.getStart().getLine(), "unknown type: "+NUM_TYPE);
         }
-
-
+ 
+ 
     }
-
+ 
     @Override
     public void exitPrint(GLangParser.PrintContext ctx) { 
         String ID = ctx.ID().getText();
@@ -146,30 +146,48 @@ public class LLVMActions extends GLangBaseListener {
              if( v.type == VarType.REAL ){
                 LLVMGenerator.printf_real( ID );
              }
-          }
+          }  
        } else {
           error(ctx.getStart().getLine(), "unknown variable: " +ID);
-       }
+       }       
     }
-
+ 
     @Override
     public void exitRead(GLangParser.ReadContext ctx) {
        String ID = ctx.ID().getText();
        if( ! variables.containsKey(ID) ) {
-        error(ctx.getStart().getLine(), "undeclared variable: " +ID);
+        error(ctx.getStart().getLine(), "undeclared variable: " +ID);         
        } 
        LLVMGenerator.scanf(ID, variables.get(ID).type);
     } 
 
     @Override 
+    public void exitAdd(GLangParser.AddContext ctx) { 
+       Value v1 = stack.pop();
+       Value v2 = stack.pop();
+       if( v1.type == v2.type ) {
+	  if( v1.type == VarType.INT ){
+             LLVMGenerator.add_i32(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+          }
+	  if( v1.type == VarType.REAL ){
+             LLVMGenerator.add_double(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+         }
+       } else {
+          error(ctx.getStart().getLine(), "add type mismatch");
+       }
+    }
+ 
+    @Override 
     public void exitProgram(GLangParser.ProgramContext ctx) { 
        System.out.println( LLVMGenerator.generate() );
     }
-
+ 
     void error(int line, String msg){
         String errorMsg = String.format("Compilation Error, line %s :: [%s]",line,msg);
        System.err.println(errorMsg);
        System.exit(1);
-   }
+   } 
 
 }
