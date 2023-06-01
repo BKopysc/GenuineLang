@@ -238,6 +238,41 @@ public class LLVMActions extends GLangBaseListener {
          }
     }
    
+   @Override
+   public void exitSubtractExpression(GLangParser.SubtractExpressionContext ctx) { 
+       Value v1 = stack.pop();
+       Value v2 = stack.pop();
+       if( v1.type == v2.type ) {
+            if( v1.type == VarType.INT ){
+                 LLVMGenerator.sub_i32(v1.id, v2.id); 
+                 stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) ); 
+            }
+            if( v1.type == VarType.REAL ){
+                 LLVMGenerator.sub_real(v1.id, v2.id); 
+                 stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL,0) ); 
+             }
+         } else {
+            error(ctx.getStart().getLine(), "subtract type mismatch: " + v1.type + " and " + v2.type);
+         }
+   }
+ 
+   @Override
+    public void exitDivideExpression(GLangParser.DivideExpressionContext ctx) { 
+         Value v1 = stack.pop();
+         Value v2 = stack.pop();
+         if( v1.type == v2.type ) {
+                if( v1.type == VarType.INT ){
+                  LLVMGenerator.div_i32(v1.id, v2.id); 
+                  stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) ); 
+                }
+                if( v1.type == VarType.REAL ){
+                  LLVMGenerator.div_real(v1.id, v2.id); 
+                  stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL,0) ); 
+                 }
+            } else {
+                error(ctx.getStart().getLine(), "divide type mismatch: " + v1.type + " and " + v2.type);
+            }
+    }
    
     @Override 
     public void exitProgram(GLangParser.ProgramContext ctx) { 
