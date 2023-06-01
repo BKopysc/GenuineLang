@@ -11,6 +11,6 @@ Podstawowo:
 - kolejność wykonywania działań?
 
 Dodatkowo:
-- tablica
-- wartości logiczne
-- string
+- tablica ❌
+- wartości logiczne ❌
+- string ❌
