@@ -18,6 +18,13 @@ jobs:
       uses: actions/setup-java@v1.4.4
       with:
         java-version: 17
+        
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1.8.0
+      with:
+        # The version of LLVM and Clang binaries to install.
+        version: "14.0"
+
 
     - name: Run make
       run: make
