@@ -112,73 +112,85 @@ public class GLangBaseListener implements GLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOperatorExpression(GLangParser.OperatorExpressionContext ctx) { }
+	@Override public void enterAddExpression(GLangParser.AddExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOperatorExpression(GLangParser.OperatorExpressionContext ctx) { }
+	@Override public void exitAddExpression(GLangParser.AddExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdd(GLangParser.AddContext ctx) { }
+	@Override public void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdd(GLangParser.AddContext ctx) { }
+	@Override public void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiply(GLangParser.MultiplyContext ctx) { }
+	@Override public void enterSubtractExpression(GLangParser.SubtractExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiply(GLangParser.MultiplyContext ctx) { }
+	@Override public void exitSubtractExpression(GLangParser.SubtractExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSubtract(GLangParser.SubtractContext ctx) { }
+	@Override public void enterDivideExpression(GLangParser.DivideExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSubtract(GLangParser.SubtractContext ctx) { }
+	@Override public void exitDivideExpression(GLangParser.DivideExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDivide(GLangParser.DivideContext ctx) { }
+	@Override public void enterValueID(GLangParser.ValueIDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDivide(GLangParser.DivideContext ctx) { }
+	@Override public void exitValueID(GLangParser.ValueIDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValue(GLangParser.ValueContext ctx) { }
+	@Override public void enterValueINT(GLangParser.ValueINTContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValue(GLangParser.ValueContext ctx) { }
+	@Override public void exitValueINT(GLangParser.ValueINTContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueREAL(GLangParser.ValueREALContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueREAL(GLangParser.ValueREALContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -16,18 +16,15 @@ semicolonStat: PRINT ID         #print
    ;
 
 expr: value #singleExpression
-    | value operator expr #operatorExpression
-    ;
-    
-operator: ADD #add
-    | MULTIPLY #multiply
-    | SUBTRACT #subtract
-    | DIVIDE #divide
+    | value ADD expr #addExpression
+    | value MULTIPLY expr #multiplyExpression
+    | value SUBTRACT expr #subtractExpression
+    | value DIVIDE expr #divideExpression
     ;
 
-value: ID 
-    | INT
-    | REAL
+value: ID #valueID
+    | INT #valueINT
+    | REAL #valueREAL
     ;
 
 NUMTYPE: 'int' | 'real';

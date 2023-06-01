@@ -68,7 +68,28 @@ class LLVMGenerator {
        + type_str + "* %"+id+")\n";
       reg++;      
    }
- 
+
+    static void add_i32(String val1, String val2){
+      main_text += "%"+reg+" = add i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void add_real(String val1, String val2){
+      main_text += "%"+reg+" = fadd double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void mul_i32(String val1, String val2){
+      main_text += "%"+reg+" = mul i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void mul_real(String val1, String val2){
+      main_text += "%"+reg+" = fmul double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+  
  
     static String generate(){
       String text = "";

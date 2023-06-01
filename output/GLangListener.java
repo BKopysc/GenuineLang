@@ -99,73 +99,87 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitSingleExpression(GLangParser.SingleExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code operatorExpression}
+	 * Enter a parse tree produced by the {@code addExpression}
 	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterOperatorExpression(GLangParser.OperatorExpressionContext ctx);
+	void enterAddExpression(GLangParser.AddExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code operatorExpression}
+	 * Exit a parse tree produced by the {@code addExpression}
 	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitOperatorExpression(GLangParser.OperatorExpressionContext ctx);
+	void exitAddExpression(GLangParser.AddExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code add}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Enter a parse tree produced by the {@code multiplyExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterAdd(GLangParser.AddContext ctx);
+	void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code add}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Exit a parse tree produced by the {@code multiplyExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitAdd(GLangParser.AddContext ctx);
+	void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code multiply}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Enter a parse tree produced by the {@code subtractExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterMultiply(GLangParser.MultiplyContext ctx);
+	void enterSubtractExpression(GLangParser.SubtractExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code multiply}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Exit a parse tree produced by the {@code subtractExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitMultiply(GLangParser.MultiplyContext ctx);
+	void exitSubtractExpression(GLangParser.SubtractExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code subtract}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Enter a parse tree produced by the {@code divideExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterSubtract(GLangParser.SubtractContext ctx);
+	void enterDivideExpression(GLangParser.DivideExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code subtract}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Exit a parse tree produced by the {@code divideExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitSubtract(GLangParser.SubtractContext ctx);
+	void exitDivideExpression(GLangParser.DivideExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code divide}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Enter a parse tree produced by the {@code valueID}
+	 * labeled alternative in {@link GLangParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterDivide(GLangParser.DivideContext ctx);
+	void enterValueID(GLangParser.ValueIDContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code divide}
-	 * labeled alternative in {@link GLangParser#operator}.
+	 * Exit a parse tree produced by the {@code valueID}
+	 * labeled alternative in {@link GLangParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitDivide(GLangParser.DivideContext ctx);
+	void exitValueID(GLangParser.ValueIDContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GLangParser#value}.
+	 * Enter a parse tree produced by the {@code valueINT}
+	 * labeled alternative in {@link GLangParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void enterValue(GLangParser.ValueContext ctx);
+	void enterValueINT(GLangParser.ValueINTContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GLangParser#value}.
+	 * Exit a parse tree produced by the {@code valueINT}
+	 * labeled alternative in {@link GLangParser#value}.
 	 * @param ctx the parse tree
 	 */
-	void exitValue(GLangParser.ValueContext ctx);
+	void exitValueINT(GLangParser.ValueINTContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code valueREAL}
+	 * labeled alternative in {@link GLangParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueREAL(GLangParser.ValueREALContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code valueREAL}
+	 * labeled alternative in {@link GLangParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueREAL(GLangParser.ValueREALContext ctx);
 }

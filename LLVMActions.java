@@ -30,8 +30,35 @@ public class LLVMActions extends GLangBaseListener {
     Stack<Value> stack = new Stack<Value>();
 
 
+    // @Override 
+    // public void exitValue(GLangParser.ValueContext ctx) { 
+    //     System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
+    //    if( ctx.ID() != null ){
+    //      String ID = ctx.ID().getText();     
+    //      if( variables.containsKey(ID) ) {
+    //         Value v = variables.get( ID );
+    //         if( v.type == VarType.INT ){
+    //            LLVMGenerator.load_int( ID );
+    //         }
+    //         if( v.type == VarType.REAL ){
+    //            LLVMGenerator.load_real( ID );
+    //         }
+    //         stack.push( new Value("%"+(LLVMGenerator.reg-1), v.type, v.length)); 
+    //      } else {
+    //         error(ctx.getStart().getLine(), "unknown variable "+ID);         
+    //      }
+    //    } 
+    //    if( ctx.INT() != null ){
+    //      stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
+    //    } 
+    //    if( ctx.REAL() != null ){
+    //     stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );
+    //    } 
+    //}
+
     @Override 
-    public void exitValue(GLangParser.ValueContext ctx) { 
+    public void exitValueID(GLangParser.ValueIDContext ctx) { 
+        System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
        if( ctx.ID() != null ){
          String ID = ctx.ID().getText();     
          if( variables.containsKey(ID) ) {
@@ -47,16 +74,23 @@ public class LLVMActions extends GLangBaseListener {
             error(ctx.getStart().getLine(), "unknown variable "+ID);         
          }
        } 
-       if( ctx.INT() != null ){
-         stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
-       } 
-       if( ctx.REAL() != null ){
+    }
+
+    @Override
+    public void exitValueINT(GLangParser.ValueINTContext ctx) { 
+        System.err.println("exitValueINT: " + ctx.INT().getText());
+        stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
+    }
+
+    @Override
+    public void exitValueREAL(GLangParser.ValueREALContext ctx) { 
+        System.err.println("exitValueREAL: " + ctx.REAL().getText());
         stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );
-       } 
     }
 
     @Override
     public void exitAssignNew(GLangParser.AssignNewContext ctx) { 
+        System.err.println("exitAssignNew");
        String ID = ctx.ID().getText();
        String NUMTYPE = ctx.NUMTYPE().getText().toUpperCase();
 
@@ -90,6 +124,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitAssign(GLangParser.AssignContext ctx){
+        System.err.println("exitAssign");
         String ID = ctx.ID().getText();
         Value v = stack.pop();
         if( !variables.containsKey(ID) ) {
@@ -109,6 +144,7 @@ public class LLVMActions extends GLangBaseListener {
 
    @Override
     public void exitDeclare(GLangParser.DeclareContext ctx){
+        System.err.println("exitDeclare");
         String ID = ctx.ID().getText();
  
         String NUM_TYPE = ctx.NUMTYPE().getText().toUpperCase();
@@ -136,6 +172,7 @@ public class LLVMActions extends GLangBaseListener {
  
     @Override
     public void exitPrint(GLangParser.PrintContext ctx) { 
+        System.err.println("exitPrint");
         String ID = ctx.ID().getText();
         if( variables.containsKey(ID) ) {
           Value v = variables.get( ID );
@@ -154,6 +191,7 @@ public class LLVMActions extends GLangBaseListener {
  
     @Override
     public void exitRead(GLangParser.ReadContext ctx) {
+        System.err.println("exitRead");
        String ID = ctx.ID().getText();
        if( ! variables.containsKey(ID) ) {
         error(ctx.getStart().getLine(), "undeclared variable: " +ID);         
@@ -162,25 +200,48 @@ public class LLVMActions extends GLangBaseListener {
     } 
 
     @Override 
-    public void exitAdd(GLangParser.AddContext ctx) { 
+    public void exitAddExpression(GLangParser.AddExpressionContext ctx) { 
+        System.err.println("exitAdd");
        Value v1 = stack.pop();
+       System.err.println(v1.id +" "+ v1.type +" "+ v1.length);
        Value v2 = stack.pop();
        if( v1.type == v2.type ) {
 	  if( v1.type == VarType.INT ){
-             LLVMGenerator.add_i32(v1.name, v2.name); 
-             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+             LLVMGenerator.add_i32(v1.id, v2.id); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) ); 
           }
 	  if( v1.type == VarType.REAL ){
-             LLVMGenerator.add_double(v1.name, v2.name); 
-             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+             LLVMGenerator.add_real(v1.id, v2.id); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL,0) ); 
          }
        } else {
-          error(ctx.getStart().getLine(), "add type mismatch");
+          error(ctx.getStart().getLine(), "add type mismatch: " + v1.type + " " + v2.type);
        }
     }
- 
+
+    @Override
+    public void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { 
+        System.err.println("exitMultiply");
+       Value v1 = stack.pop();
+       Value v2 = stack.pop();
+       if( v1.type == v2.type ) {
+            if( v1.type == VarType.INT ){
+                 LLVMGenerator.mul_i32(v1.id, v2.id); 
+                 stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) ); 
+            }
+            if( v1.type == VarType.REAL ){
+                 LLVMGenerator.mul_real(v1.id, v2.id); 
+                 stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL,0) ); 
+             }
+         } else {
+            error(ctx.getStart().getLine(), "multiply type mismatch: " + v1.type + " " + v2.type);
+         }
+    }
+   
+   
     @Override 
     public void exitProgram(GLangParser.ProgramContext ctx) { 
+        System.err.println("exitProgram");
        System.out.println( LLVMGenerator.generate() );
     }
  

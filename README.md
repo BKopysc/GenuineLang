@@ -5,8 +5,10 @@
 Podstawowo:
 - zmienne: int, real ✅
 - read, print ✅
-- podstawowe operacje arytmetyczne
+- podstawowe operacje arytmetyczne ✅
 - wskazywanie błędów podczas analizy leksykalno-składniowej ✅
+
+- kolejność wykonywania działań?
 
 Dodatkowo:
 - tablica
