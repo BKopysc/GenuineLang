@@ -1,0 +1,4 @@
+int a = 5 + 25 +10;
+int b = 2*18;
+int c = a*b;
+print c;

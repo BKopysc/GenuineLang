@@ -8,6 +8,8 @@ TEST_OUT = test.ll
 all: generate compile test clean
 #all: clean
 
+prepare-for-tests: generate compile
+
 generate:
 	java -jar $(ANTLR) -o output GLang.g4
 
@@ -21,5 +23,8 @@ test:
 clean:
 	rm -f *.class
 	rm -f ./output/*.class
+
+clean-tests:
+	rm -f ./prepared-tests/*.ll
 
 

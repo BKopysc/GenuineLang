@@ -1,0 +1,18 @@
+----- Logs from lli: 
+
+Processing file: assign-error-wrong-type.gl
+Processing file: assign-ok.gl
+5
+Processing file: math-error-wrong-type.gl
+Processing file: math-ok.gl
+1440
+Processing file: print-error-wrong-var.gl
+Processing file: print-ok.gl
+4.500000
+Processing file: read-error-wrong-var.gl
+Processing file: read-ok.gl
+10
+Processing file: semicolon-error.gl
+Processing file: types-error-wrong-type.gl
+Processing file: types-ok.gl
+4

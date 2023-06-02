@@ -58,7 +58,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override 
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
-        System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
+        //System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
        if( ctx.ID() != null ){
          String ID = ctx.ID().getText();     
          if( variables.containsKey(ID) ) {
@@ -78,19 +78,19 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitValueINT(GLangParser.ValueINTContext ctx) { 
-        System.err.println("exitValueINT: " + ctx.INT().getText());
+        //System.err.println("exitValueINT: " + ctx.INT().getText());
         stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
     }
 
     @Override
     public void exitValueREAL(GLangParser.ValueREALContext ctx) { 
-        System.err.println("exitValueREAL: " + ctx.REAL().getText());
+        //System.err.println("exitValueREAL: " + ctx.REAL().getText());
         stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );
     }
 
     @Override
     public void exitAssignNew(GLangParser.AssignNewContext ctx) { 
-        System.err.println("exitAssignNew");
+       // System.err.println("exitAssignNew");
        String ID = ctx.ID().getText();
        String NUMTYPE = ctx.NUMTYPE().getText().toUpperCase();
 
@@ -124,7 +124,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitAssign(GLangParser.AssignContext ctx){
-        System.err.println("exitAssign");
+        //System.err.println("exitAssign");
         String ID = ctx.ID().getText();
         Value v = stack.pop();
         if( !variables.containsKey(ID) ) {
@@ -144,7 +144,7 @@ public class LLVMActions extends GLangBaseListener {
 
    @Override
     public void exitDeclare(GLangParser.DeclareContext ctx){
-        System.err.println("exitDeclare");
+        //System.err.println("exitDeclare");
         String ID = ctx.ID().getText();
  
         String NUM_TYPE = ctx.NUMTYPE().getText().toUpperCase();
@@ -172,7 +172,7 @@ public class LLVMActions extends GLangBaseListener {
  
     @Override
     public void exitPrint(GLangParser.PrintContext ctx) { 
-        System.err.println("exitPrint");
+        //System.err.println("exitPrint");
         String ID = ctx.ID().getText();
         if( variables.containsKey(ID) ) {
           Value v = variables.get( ID );
@@ -191,7 +191,7 @@ public class LLVMActions extends GLangBaseListener {
  
     @Override
     public void exitRead(GLangParser.ReadContext ctx) {
-        System.err.println("exitRead");
+        //System.err.println("exitRead");
        String ID = ctx.ID().getText();
        if( ! variables.containsKey(ID) ) {
         error(ctx.getStart().getLine(), "undeclared variable: " +ID);         
@@ -201,9 +201,9 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override 
     public void exitAddExpression(GLangParser.AddExpressionContext ctx) { 
-        System.err.println("exitAdd");
+        //System.err.println("exitAdd");
        Value v1 = stack.pop();
-       System.err.println(v1.id +" "+ v1.type +" "+ v1.length);
+       //System.err.println(v1.id +" "+ v1.type +" "+ v1.length);
        Value v2 = stack.pop();
        if( v1.type == v2.type ) {
 	  if( v1.type == VarType.INT ){
@@ -221,7 +221,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { 
-        System.err.println("exitMultiply");
+       // System.err.println("exitMultiply");
        Value v1 = stack.pop();
        Value v2 = stack.pop();
        if( v1.type == v2.type ) {
@@ -241,7 +241,7 @@ public class LLVMActions extends GLangBaseListener {
    
     @Override 
     public void exitProgram(GLangParser.ProgramContext ctx) { 
-        System.err.println("exitProgram");
+       // System.err.println("exitProgram");
        System.out.println( LLVMGenerator.generate() );
     }
  
