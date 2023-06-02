@@ -8,7 +8,6 @@ Podstawowo:
 - podstawowe operacje arytmetyczne ✅
 - wskazywanie błędów podczas analizy leksykalno-składniowej ✅
 - testy ✅
-- kolejność wykonywania działań ❓
 
 Dodatkowo:
 - tablica ❌
