@@ -196,7 +196,17 @@ public class LLVMActions extends GLangBaseListener {
        if( ! variables.containsKey(ID) ) {
         error(ctx.getStart().getLine(), "undeclared variable: " +ID);         
        } 
-       LLVMGenerator.scanf(ID, variables.get(ID).type);
+
+       switch (variables.get(ID).type) {
+           case INT:
+               LLVMGenerator.scanf_int(ID);
+               break;
+           case REAL:
+               LLVMGenerator.scanf_real(ID);
+               break;
+           default:
+               error(ctx.getStart().getLine(), "unknown type: "+variables.get(ID).type);
+       }
     } 
 
     @Override 

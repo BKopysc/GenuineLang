@@ -43,4 +43,6 @@ for file in "$folder"/*.gl; do
 done
 
 #save final_logs to file
-echo "$final_logs" > "tests-logs.txt"
+echo "$final_logs" > "lli-logs.txt"
+
+make clean || exit 1
