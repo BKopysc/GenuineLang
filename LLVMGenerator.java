@@ -89,7 +89,25 @@ class LLVMGenerator {
       reg++;
    }
 
-  
+    static void sub_i32(String val1, String val2){
+      main_text += "%"+reg+" = sub i32 "+val2+", "+val1+"\n";
+      reg++;
+   }
+ 
+   static void sub_real(String val1, String val2){
+      main_text += "%"+reg+" = fsub double "+val2+", "+val1+"\n";
+      reg++;
+   }
+ 
+   static void div_i32(String val1, String val2){
+      main_text += "%"+reg+" = sdiv i32 "+val2+", "+val1+"\n";
+      reg++;
+   }
+ 
+   static void div_real(String val1, String val2){
+      main_text += "%"+reg+" = fdiv double "+val2+", "+val1+"\n";
+      reg++;
+   }
  
     static String generate(){
       String text = "";
