@@ -7,8 +7,8 @@ Podstawowo:
 - read, print ✅
 - podstawowe operacje arytmetyczne ✅
 - wskazywanie błędów podczas analizy leksykalno-składniowej ✅
-
-- kolejność wykonywania działań?
+- testy ✅
+- kolejność wykonywania działań ❓
 
 Dodatkowo:
 - tablica ❌
