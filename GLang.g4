@@ -2,24 +2,61 @@
 
 grammar GLang;
 
-program: line+ EOF
+program: startBlock
     ;
     
-line: semicolonStat ';' NEWLINE
+startBlock: (defaultLine? NEWLINE)* 
+;
+
+nestedBlock: (basicLine? NEWLINE)*
+;
+
+nestedFunctionBlock: (functionLine? NEWLINE)*
+;
+
+defaultLine: functionStat
+| basicLine
+;
+
+basicLine: instructionStat
+| semicolonStat ';'
+    ;
+
+functionLine: returnStat
+    | instructionStat
+    | semicolonStat ';'
+    ;
+
+functionStat: FUNCTION_OP NUMTYPE ID '(' functionParams ')' DO_OP nestedFunctionBlock END_OP #functionDef
+    ;
+
+functionParams: (NUMTYPE ID (',' NUMTYPE ID)*)?
     ;
 
 semicolonStat: PRINT ID         #print
+    | functionCall              #call
 	| NUMTYPE ID ASSIGN expr #assignNew
 	| ID ASSIGN expr            #assign
     | NUMTYPE ID             #declare
 	| READ ID                   #read
    ;
 
+functionCall: ID '(' functionCallParams ')'
+    ;
+
+functionCallParams: (expr (',' expr)*)? 
+    ;
+
+returnStat: 'return' value ';'
+;
+
+
 expr: value #singleExpression
     | value ADD expr #addExpression
     | value MULTIPLY expr #multiplyExpression
     | value SUBTRACT expr #subtractExpression
     | value DIVIDE expr #divideExpression
+    | functionCall #functionCallExpression
     ;
 
 value: ID #valueID
@@ -27,16 +64,20 @@ value: ID #valueID
     | REAL #valueREAL
     ;
 
+
+
 NUMTYPE: 'int' | 'real';
 
-PRINT:	'print' 
+PRINT:	'print'
    ;
 
-READ:	'read' 
+READ:	'read'
    ;
+
 
 ID:   ('a'..'z'|'A'..'Z')+
    ;
+
 
 INT:   '0'..'9'+
     ;
@@ -53,4 +94,6 @@ MULTIPLY: '*';
 SUBTRACT: '-';
 DIVIDE: '/';
 
-WS: [ \t\n\r\f]+ -> skip ;
+
+
+WS: [ \t\r\f]+ -> skip ;
