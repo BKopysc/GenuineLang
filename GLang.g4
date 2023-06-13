@@ -50,6 +50,18 @@ functionCallParams: (expr (',' expr)*)?
 returnStat: 'return' value ';'
 ;
 
+instructionStat: IF_OP condition DO_OP nestedBlock END_OP #singleIf
+     | IF_OP condition DO_OP nestedBlock ELSE_OP nestedBlock END_OP #ifElse
+     | WHILE_OP condition DO_OP nestedBlock END_OP #while
+    ;
+    
+
+condition: expr EQUAL expr #equalCondition
+    | expr GREATER expr #greaterCondition
+    | expr LESS expr #lessCondition
+    | expr GREATER_EQUAL expr #greaterEqualCondition
+    | expr LESS_EQUAL expr #lessEqualCondition
+    ;
 
 expr: value #singleExpression
     | value ADD expr #addExpression
@@ -74,6 +86,17 @@ PRINT:	'print'
 READ:	'read'
    ;
 
+EQUAL: '==';
+GREATER: '>';
+LESS: '<';
+GREATER_EQUAL: '>=';
+LESS_EQUAL: '<=';
+IF_OP: 'if';
+DO_OP: 'do';
+ELSE_OP: 'else';
+END_OP: 'end';
+WHILE_OP: 'while';
+FUNCTION_OP: 'function';
 
 ID:   ('a'..'z'|'A'..'Z')+
    ;
