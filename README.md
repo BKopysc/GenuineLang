@@ -8,9 +8,18 @@ Podstawowo:
 - podstawowe operacje arytmetyczne ✅
 - wskazywanie błędów podczas analizy leksykalno-składniowej ✅
 
-- kolejność wykonywania działań?
+## Część 2
+
+Podstawowo:
+- if/else
+- pętla
+- funkcje
+- zmienne lokalne i globalne
 
 Dodatkowo:
-- tablica ❌
-- wartości logiczne ❌
-- string ❌
+- struktury
+- klasy
+- dynamiczne typowania
+- funkcje-generatory (yield)
+
+

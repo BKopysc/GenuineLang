@@ -11,8 +11,8 @@ Processing file: print-ok.gl
 4.500000
 Processing file: read-error-wrong-var.gl
 Processing file: read-ok.gl
-6
+10
 Processing file: semicolon-error.gl
 Processing file: types-error-wrong-type.gl
 Processing file: types-ok.gl
-4
+4.500000

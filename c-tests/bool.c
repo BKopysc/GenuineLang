@@ -3,9 +3,8 @@
 
 
 int main(){
-
-    int a[] = {1,2,3,4,5};
-
-    printf("%d\n",a[1]);
+    bool a = true;
+    bool b = false;
+    bool c = a || b && a;
     return 0;
 }
