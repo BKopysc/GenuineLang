@@ -7,6 +7,7 @@ Podstawowo:
 - read, print ✅
 - podstawowe operacje arytmetyczne ✅
 - wskazywanie błędów podczas analizy leksykalno-składniowej ✅
+- testy ✅
 
 ## Część 2
 
@@ -16,10 +17,9 @@ Podstawowo:
 - funkcje
 - zmienne lokalne i globalne
 
+
 Dodatkowo:
 - struktury
 - klasy
 - dynamiczne typowania
 - funkcje-generatory (yield)
-
-
