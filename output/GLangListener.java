@@ -191,6 +191,16 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitFunctionCallParams(GLangParser.FunctionCallParamsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GLangParser#returnStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStat(GLangParser.ReturnStatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#returnStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStat(GLangParser.ReturnStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code singleIf}
 	 * labeled alternative in {@link GLangParser#instructionStat}.
 	 * @param ctx the parse tree
@@ -226,16 +236,6 @@ public interface GLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWhile(GLangParser.WhileContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GLangParser#returnStat}.
-	 * @param ctx the parse tree
-	 */
-	void enterReturnStat(GLangParser.ReturnStatContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GLangParser#returnStat}.
-	 * @param ctx the parse tree
-	 */
-	void exitReturnStat(GLangParser.ReturnStatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code equalCondition}
 	 * labeled alternative in {@link GLangParser#condition}.

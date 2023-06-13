@@ -1,3 +1,5 @@
-int b;
-read b;
-print b;
+int a=2;
+
+if a<2 do
+    print a;
+end

@@ -9,28 +9,20 @@ target triple = "x86_64-pc-linux-gnu"
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
   %2 = alloca i32, align 4
-  %3 = alloca i32, align 4
   store i32 0, i32* %1, align 4
   store i32 1, i32* %2, align 4
-  %4 = load i32, i32* %2, align 4
-  %5 = sitofp i32 %4 to double
-  %6 = fcmp oge double %5, 2.500000e+00
-  br i1 %6, label %7, label %10
+  %3 = load i32, i32* %2, align 4
+  %4 = icmp sle i32 %3, 2
+  br i1 %4, label %5, label %8
 
-7:                                                ; preds = %0
-  %8 = load i32, i32* %2, align 4
-  %9 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 %8)
-  br label %13
+5:                                                ; preds = %0
+  %6 = load i32, i32* %2, align 4
+  %7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 %6)
+  br label %8
 
-10:                                               ; preds = %0
-  store i32 5, i32* %3, align 4
-  %11 = load i32, i32* %3, align 4
-  %12 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 %11)
-  br label %13
-
-13:                                               ; preds = %10, %7
-  %14 = load i32, i32* %1, align 4
-  ret i32 %14
+8:                                                ; preds = %5, %0
+  %9 = load i32, i32* %1, align 4
+  ret i32 %9
 }
 
 declare dso_local i32 @printf(i8*, ...) #1
