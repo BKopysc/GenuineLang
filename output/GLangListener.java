@@ -329,6 +329,18 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitLessEqualCondition(GLangParser.LessEqualConditionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code notEqualCondition}
+	 * labeled alternative in {@link GLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotEqualCondition(GLangParser.NotEqualConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notEqualCondition}
+	 * labeled alternative in {@link GLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotEqualCondition(GLangParser.NotEqualConditionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code singleExpression}
 	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree

@@ -12,6 +12,15 @@ enum VarType{
     UNKNOWN
 }
 
+enum ConditionType{
+    EQUAL,
+    NOT_EQUAL,
+    LESS,
+    LESS_EQUAL,
+    GREATER,
+    GREATER_EQUAL
+}
+
 // enum IfType{
 //     SINGLE,
 //     IFELSE,
@@ -294,29 +303,30 @@ public class LLVMActions extends GLangBaseListener {
         System.err.println("exitLessCondition");
         Value v2 = stack.pop();
         Value v1 = stack.pop();
-
-        if( v1.type == v2.type ) {
-            if( v1.type == VarType.INT ){
-                LLVMGenerator.less_i32(v1.id, v2.id);
-            }
-            if( v1.type == VarType.REAL ){
-                LLVMGenerator.less_real(v1.id, v2.id);
-            }
-
-            BrCompareLabel brCompare = new BrCompareLabel("%"+(LLVMGenerator.reg-1));
-            brCompareStack.push(brCompare);
-            LLVMGenerator.br_compare(brCompare.compareId, brCompare.trueId, brCompare.falseId);
-            LLVMGenerator.create_label(brCompare.trueId);
-
-
-        } else {
-            error(ctx.getStart().getLine(), "less condition type mismatch: " + v1.type + " and " + v2.type);
-        }
-
-        System.err.println(v1.id + " " + v2.id);
+        conditionCompare(v2, v1, ConditionType.LESS, ctx.getStart().getLine());
     }
 
-    //TODO: More conditions: greater, equal, less_equal, greater_equal, not_equal
+    @Override
+    public void exitLessEqualCondition(GLangParser.LessEqualConditionContext ctx){
+        Value v2 = stack.pop();
+        Value v1 = stack.pop();
+        conditionCompare(v2, v1, ConditionType.LESS_EQUAL, ctx.getStart().getLine());
+    }
+
+    @Override
+    public void exitGreaterCondition(GLangParser.GreaterConditionContext ctx){
+        Value v2 = stack.pop();
+        Value v1 = stack.pop();
+        conditionCompare(v2, v1, ConditionType.GREATER, ctx.getStart().getLine());
+    }
+
+
+    @Override
+    public void exitGreaterEqualCondition(GLangParser.GreaterEqualConditionContext ctx){
+        Value v2 = stack.pop();
+        Value v1 = stack.pop();
+        conditionCompare(v2, v1, ConditionType.GREATER_EQUAL, ctx.getStart().getLine());
+    }
 
 
     @Override

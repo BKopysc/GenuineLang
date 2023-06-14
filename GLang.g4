@@ -69,6 +69,7 @@ condition: expr EQUAL expr #equalCondition
     | expr LESS expr #lessCondition
     | expr GREATER_EQUAL expr #greaterEqualCondition
     | expr LESS_EQUAL expr #lessEqualCondition
+    | expr NOT_EQUAL expr #notEqualCondition
     ;
 
 expr: value #singleExpression
@@ -95,6 +96,7 @@ READ:	'read'
    ;
 
 EQUAL: '==';
+NOT_EQUAL: '!=';
 GREATER: '>';
 LESS: '<';
 GREATER_EQUAL: '>=';
