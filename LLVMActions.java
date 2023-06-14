@@ -12,11 +12,11 @@ enum VarType{
     UNKNOWN
 }
 
-enum IfType{
-    SINGLE,
-    IFELSE,
-    NONE
-}
+// enum IfType{
+//     SINGLE,
+//     IFELSE,
+//     NONE
+// }
 
 class Value{
     public String id;
@@ -31,23 +31,25 @@ class Value{
 
 class BrCompareLabel{
     public String compareId;
+    public String cleanCompareId;
     public String trueId;
-    public String elseId;
-    public String endId;
-    public IfType type;
-    public BrCompareLabel( String compareId, IfType type ){
+    public String falseId;
+    public String extraId;
+    public BrCompareLabel( String compareId){
         this.compareId = compareId;
-        this.type = type;
-        this.trueId = "true"+compareId;
-        this.elseId = "else"+compareId;
-        this.endId = "end"+compareId;
+        this.cleanCompareId = compareId.replace("%", "");
+        this.trueId = "true"+cleanCompareId;
+        this.falseId = "false"+cleanCompareId;
+        this.extraId = "extra"+cleanCompareId;
     }
 }
 
 class BrLabel{
     public String targetId;
+    //public String cleanTargetId;
     public BrLabel( String targetId ){
-        this.targetId = targetId;
+        this.targetId = "target" + targetId;
+        //this.cleanTargetId = targetId.replace("%", "");
     }
 }
 
@@ -56,8 +58,8 @@ public class LLVMActions extends GLangBaseListener {
 
     HashMap<String, Value> variables = new HashMap<String, Value>();
     Stack<Value> stack = new Stack<Value>();
-    Stack<BrCompareLabel> BrCompareStack = new Stack<BrCompareLabel>();
-    Stack<BrLabel> BrStack = new Stack<BrLabel>();
+    Stack<BrCompareLabel> brCompareStack = new Stack<BrCompareLabel>();
+    Stack<BrLabel> brStack = new Stack<BrLabel>();
 
     @Override 
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
@@ -295,26 +297,16 @@ public class LLVMActions extends GLangBaseListener {
 
         if( v1.type == v2.type ) {
             if( v1.type == VarType.INT ){
-                //LLVMGenerator.less_i32(v1.id, v2.id);
-                //stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) );
+                LLVMGenerator.less_i32(v1.id, v2.id);
             }
             if( v1.type == VarType.REAL ){
-               // LLVMGenerator.less_real(v1.id, v2.id);
-                //stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0) );
+                LLVMGenerator.less_real(v1.id, v2.id);
             }
 
-            // compareRes = new Value("%"+(LLVMGenerator.reg-1), VarType.INT,0);
-            //ifValue = new IfValue(LLVMGenerator.reg-1, IfType.SINGLE);
-
-            brCompare = new BrCompareLabel("%"+(LLVMGenerator.reg-1), IfType.SINGLE);
+            BrCompareLabel brCompare = new BrCompareLabel("%"+(LLVMGenerator.reg-1));
             brCompareStack.push(brCompare);
-            prepareBrCompareLLVM(brCompare);
-            
-            // String trueLabel = "true" + compareRes.id;
-            // String falseLabel = "false" + compareRes.id;
-            // String endLabel = "end" + compareRes.id;
-            // labelStack.push(endLabel);
-            // LLVMGenerator.condtion_label_jump(compareRes.id, trueLabel, falseLabel);
+            LLVMGenerator.br_compare(brCompare.compareId, brCompare.trueId, brCompare.falseId);
+            LLVMGenerator.create_label(brCompare.trueId);
 
 
         } else {
@@ -324,29 +316,59 @@ public class LLVMActions extends GLangBaseListener {
         System.err.println(v1.id + " " + v2.id);
     }
 
-    public void prepareBrCompareLLVM(BrCompareLabel brCompare){
+    //TODO: More conditions: greater, equal, less_equal, greater_equal, not_equal
 
-        if(brCompare.type == IfType.SINGLE){
-            LLVMGenerator.br_compare(brCompare.compareId, brCompare.trueId, brCompare.endId);
-        } else if(brCompare.ifType == IfType.ELSEIF){
-            LLVMGenerator.br_compare(brCompare.compareId, brCompare.trueId, brCompare.falseId);
-        } else {
-
-        }
-        
-    }
 
     @Override
     public void enterSingleIf(GLangParser.SingleIfContext ctx){
         System.err.println("enterSingleIf");
-        singleIfFlag = true;
     }
 
     @Override
     public void exitSingleIf(GLangParser.SingleIfContext ctx){
         System.err.println("exitSingleIf");
-        singleIfFlag = false;
+
+        BrCompareLabel brCompare = brCompareStack.pop();
+        LLVMGenerator.single_br(brCompare.falseId);
+        LLVMGenerator.create_label(brCompare.falseId);
     }
+
+    @Override
+    public void enterNestedElseBlock(GLangParser.NestedElseBlockContext ctx){
+        System.err.println("enterNestedElseBlock");
+        BrCompareLabel brCompare = brCompareStack.peek();
+
+        LLVMGenerator.single_br(brCompare.extraId);
+        LLVMGenerator.create_label(brCompare.falseId);
+    }
+
+    @Override
+    public void exitIfElse(GLangParser.IfElseContext ctx){
+        System.err.println("exitIfElse");
+        BrCompareLabel brCompare = brCompareStack.pop();
+        LLVMGenerator.single_br(brCompare.extraId);
+        LLVMGenerator.create_label(brCompare.extraId);
+    }
+
+
+    @Override
+    public void enterWhile(GLangParser.WhileContext ctx){
+        System.err.println("enterWhile");
+        BrLabel brLabel = new BrLabel(Integer.toString(LLVMGenerator.reg-1));
+        brStack.push(brLabel);
+        LLVMGenerator.single_br(brLabel.targetId);
+        LLVMGenerator.create_label(brLabel.targetId);
+    }
+
+    @Override
+    public void exitWhile(GLangParser.WhileContext ctx){
+        System.err.println("exitWhile");
+        BrLabel brLabel = brStack.pop();
+        LLVMGenerator.single_br(brLabel.targetId);
+        BrCompareLabel brCompare = brCompareStack.pop();
+        LLVMGenerator.create_label(brCompare.falseId);
+    }
+
    
     @Override 
     public void exitProgram(GLangParser.ProgramContext ctx) { 

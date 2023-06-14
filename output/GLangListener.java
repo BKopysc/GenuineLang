@@ -237,6 +237,38 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitWhile(GLangParser.WhileContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code nestedElseBlock}
+	 * labeled alternative in {@link GLangParser#elseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterNestedElseBlock(GLangParser.NestedElseBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code nestedElseBlock}
+	 * labeled alternative in {@link GLangParser#elseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitNestedElseBlock(GLangParser.NestedElseBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GLangParser#ifCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfCondition(GLangParser.IfConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#ifCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfCondition(GLangParser.IfConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GLangParser#elseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseCondition(GLangParser.ElseConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#elseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseCondition(GLangParser.ElseConditionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code equalCondition}
 	 * labeled alternative in {@link GLangParser#condition}.
 	 * @param ctx the parse tree

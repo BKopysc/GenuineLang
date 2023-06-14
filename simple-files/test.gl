@@ -1,5 +1,11 @@
-int a=2;
+int a=10;
 
-if a<2 do
+while a<12 do
     print a;
+    int b=0;
+    while b<5 do
+        print b;
+        b = b+1;
+    end
+    a = a+1;
 end

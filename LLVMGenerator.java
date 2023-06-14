@@ -120,6 +120,28 @@ class LLVMGenerator {
       main_text += "%"+reg+" = fdiv double "+val2+", "+val1+"\n";
       reg++;
    }
+
+   static void less_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp slt i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void less_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp olt double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void br_compare(String compareVal, String trueVal, String endVal){
+      main_text += "br i1 "+compareVal+", label %"+trueVal+", label %"+endVal+"\n";
+   }
+
+   static void create_label(String label){
+      main_text += label+":\n";
+   }
+
+   static void single_br(String label){
+      main_text += "br label %"+label+"\n";
+   }
  
     static String generate(){
       String text = "";

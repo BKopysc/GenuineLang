@@ -11,18 +11,24 @@ define dso_local i32 @main() #0 {
   %2 = alloca i32, align 4
   store i32 0, i32* %1, align 4
   store i32 1, i32* %2, align 4
-  %3 = load i32, i32* %2, align 4
-  %4 = icmp sle i32 %3, 2
-  br i1 %4, label %5, label %8
+  br label %3
 
-5:                                                ; preds = %0
-  %6 = load i32, i32* %2, align 4
-  %7 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 %6)
-  br label %8
+3:                                                ; preds = %6, %0
+  %4 = load i32, i32* %2, align 4
+  %5 = icmp slt i32 %4, 5
+  br i1 %5, label %6, label %11
 
-8:                                                ; preds = %5, %0
-  %9 = load i32, i32* %1, align 4
-  ret i32 %9
+6:                                                ; preds = %3
+  %7 = load i32, i32* %2, align 4
+  %8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i32 %7)
+  %9 = load i32, i32* %2, align 4
+  %10 = add nsw i32 %9, 1
+  store i32 %10, i32* %2, align 4
+  br label %3
+
+11:                                               ; preds = %3
+  %12 = load i32, i32* %1, align 4
+  ret i32 %12
 }
 
 declare dso_local i32 @printf(i8*, ...) #1

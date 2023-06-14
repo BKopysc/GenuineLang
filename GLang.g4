@@ -50,11 +50,19 @@ functionCallParams: (expr (',' expr)*)?
 returnStat: 'return' value ';'
 ;
 
-instructionStat: IF_OP condition DO_OP nestedBlock END_OP #singleIf
-     | IF_OP condition DO_OP nestedBlock ELSE_OP nestedBlock END_OP #ifElse
-     | WHILE_OP condition DO_OP nestedBlock END_OP #while
+instructionStat: IF_OP ifCondition DO_OP nestedBlock END_OP #singleIf
+     | IF_OP ifCondition DO_OP nestedBlock ELSE_OP elseBlock END_OP #ifElse
+     | WHILE_OP elseCondition DO_OP nestedBlock END_OP #while
     ;
-    
+
+elseBlock: nestedBlock #nestedElseBlock
+    ;
+
+ifCondition: condition 
+    ;
+
+elseCondition: condition 
+    ;
 
 condition: expr EQUAL expr #equalCondition
     | expr GREATER expr #greaterCondition
