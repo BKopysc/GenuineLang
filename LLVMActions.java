@@ -328,6 +328,84 @@ public class LLVMActions extends GLangBaseListener {
         conditionCompare(v2, v1, ConditionType.GREATER_EQUAL, ctx.getStart().getLine());
     }
 
+    @Override
+    public void exitEqualCondition(GLangParser.EqualConditionContext ctx){
+        Value v2 = stack.pop();
+        Value v1 = stack.pop();
+        conditionCompare(v2, v1, ConditionType.EQUAL, ctx.getStart().getLine());
+    }
+
+    @Override
+    public void exitNotEqualCondition(GLangParser.NotEqualConditionContext ctx){
+        Value v2 = stack.pop();
+        Value v1 = stack.pop();
+        conditionCompare(v2, v1, ConditionType.NOT_EQUAL, ctx.getStart().getLine());
+    }
+
+
+    public void conditionCompare(Value v2, Value v1, ConditionType cType, int ctxLine){
+
+        if( v1.type != v2.type ) {
+            error(ctxLine, "type mismatch [in condition]: " + v1.type + " and " + v2.type);
+        } 
+           
+         if( v1.type == VarType.INT ){
+
+            switch (cType) {
+                case LESS:
+                    LLVMGenerator.less_i32(v1.id, v2.id);
+                    break;
+                case GREATER:
+                    LLVMGenerator.greater_i32(v1.id, v2.id);
+                    break;
+                case EQUAL:
+                    LLVMGenerator.equal_i32(v1.id, v2.id);
+                    break;
+                case LESS_EQUAL:
+                    LLVMGenerator.less_equal_i32(v1.id, v2.id);
+                    break;
+                case GREATER_EQUAL:
+                    LLVMGenerator.greater_equal_i32(v1.id, v2.id);
+                    break;
+                case NOT_EQUAL:
+                    LLVMGenerator.not_equal_i32(v1.id, v2.id);
+                    break;
+                default:
+                    break;
+            }
+        }
+            
+        if( v1.type == VarType.REAL ){
+            switch (cType){
+                case LESS:
+                    LLVMGenerator.less_real(v1.id, v2.id);
+                    break;
+                case GREATER:
+                    LLVMGenerator.greater_real(v1.id, v2.id);
+                    break;
+                case EQUAL:
+                    LLVMGenerator.equal_real(v1.id, v2.id);
+                    break;
+                case LESS_EQUAL:
+                    LLVMGenerator.less_equal_real(v1.id, v2.id);
+                    break;
+                case GREATER_EQUAL:
+                    LLVMGenerator.greater_equal_real(v1.id, v2.id);
+                    break;
+                case NOT_EQUAL:
+                    LLVMGenerator.not_equal_real(v1.id, v2.id);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        BrCompareLabel brCompare = new BrCompareLabel("%"+(LLVMGenerator.reg-1));
+        brCompareStack.push(brCompare);
+        LLVMGenerator.br_compare(brCompare.compareId, brCompare.trueId, brCompare.falseId);
+        LLVMGenerator.create_label(brCompare.trueId);
+
+    }
 
     @Override
     public void enterSingleIf(GLangParser.SingleIfContext ctx){

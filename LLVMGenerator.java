@@ -154,6 +154,38 @@ class LLVMGenerator {
       reg++;
    }
 
+   //real conditionals
+
+   static void less_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp olt double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void less_equal_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp ole double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void greater_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp ogt double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void greater_equal_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp oge double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void equal_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp oeq double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void not_equal_real(String val1, String val2){
+      main_text += "%"+reg+" = fcmp one double "+val1+", "+val2+"\n";
+      reg++;
+   }
+
    // boolean compare utils
 
    static void br_compare(String compareVal, String trueVal, String endVal){
