@@ -22,32 +22,37 @@ basicLine: instructionStat
 | semicolonStat ';'
     ;
 
-functionLine: returnStat
-    | instructionStat
+functionLine: instructionStat
     | semicolonStat ';'
     ;
 
-functionStat: FUNCTION_OP NUMTYPE ID '(' functionParams ')' DO_OP nestedFunctionBlock END_OP #functionDef
+functionStat: FUNCTION_OP functionHeader nestedFunctionBlock returnStat END_OP #functionDef
     ;
 
 functionParams: (NUMTYPE ID (',' NUMTYPE ID)*)?
     ;
 
+functionHeader: functionInit '(' functionParams ')' DO_OP NEWLINE
+    ;
+
+functionInit: NUMTYPE ID
+    ;
+
 semicolonStat: PRINT ID         #print
-    | functionCall              #call
+    | ID functionCall              #call
 	| NUMTYPE ID ASSIGN expr #assignNew
 	| ID ASSIGN expr            #assign
     | NUMTYPE ID             #declare
 	| READ ID                   #read
    ;
 
-functionCall: ID '(' functionCallParams ')'
+functionCall: '(' (expr (',' expr)*)?  ')'
     ;
 
-functionCallParams: (expr (',' expr)*)? 
-    ;
+// functionCallParams: (expr (',' expr)*)? 
+//     ;
 
-returnStat: 'return' value ';'
+returnStat: 'return' value ';' NEWLINE
 ;
 
 instructionStat: IF_OP ifCondition DO_OP nestedBlock END_OP #singleIf
@@ -77,7 +82,7 @@ expr: value #singleExpression
     | value MULTIPLY expr #multiplyExpression
     | value SUBTRACT expr #subtractExpression
     | value DIVIDE expr #divideExpression
-    | functionCall #functionCallExpression
+    | ID functionCall #functionCallExpression
     ;
 
 value: ID #valueID

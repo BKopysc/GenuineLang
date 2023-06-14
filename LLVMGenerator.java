@@ -9,13 +9,31 @@
 //     UNKNOWN
 // }
 
+import java.util.List;
+
 class LLVMGenerator {
     
     static String header_text = "";
-    static String main_text = "";
+    static String basic_text = "";
+    static String functions_text = "";
     static int reg = 1;
 
+    private static String main_text = basic_text;
 
+   static void declare_function(String type, String name, List<String> argsTypes, List<String> argsNames){
+      String args = "";
+      for(int i=0; i<argsTypes.size(); i++){
+         args += argsTypes.get(i)+" %"+argsNames.get(i);
+         if( i < argsTypes.size()-1 ) args += ", ";
+      }
+      main_text = functions_text;
+      main_text += "declare "+type+" @"+name+"("+args+") { \n";
+   }
+
+   static void end_function(){
+      main_text += "}\n\n";
+      main_text = basic_text;
+   }
 
     static void declare_int(String id){
       main_text += "%"+id+" = alloca i32\n";
@@ -212,8 +230,10 @@ class LLVMGenerator {
       text += "declare i32 @__isoc99_scanf(i8*, ...)\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
-      text += main_text;
+      text += basic_text;
       text += "ret i32 0 }\n";
+
+      text += functions_text;
       return text;
    }
 }

@@ -4,7 +4,10 @@
  */
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
 
 enum VarType{
     INT,
@@ -62,21 +65,98 @@ class BrLabel{
     }
 }
 
+class FunctionObj{
+    String name;
+    VarType type;
+    List<VarType> argsTypes;
+    List<String> argsNames;
+    public FunctionObj( String name, VarType type){
+        this.name = name;
+        this.type = type;
+        this.argsTypes = null;
+        this.argsNames = null;
+    }
+}
+
 
 public class LLVMActions extends GLangBaseListener {
 
     HashMap<String, Value> variables = new HashMap<String, Value>();
+    HashMap<String, Value> localVariables = new HashMap<String, Value>();
+    HashMap<String, FunctionObj> functions = new HashMap<String, FunctionObj>();
+    
+    Map<String, Value> defaultVariablesMap = this.variables;
+
     Stack<Value> stack = new Stack<Value>();
     Stack<BrCompareLabel> brCompareStack = new Stack<BrCompareLabel>();
     Stack<BrLabel> brStack = new Stack<BrLabel>();
 
+    String currentFunction = "";
+    boolean isFunctionHeader = false;
+    
+
+    @Override
+    public void enterFunctionDef(GLangParser.FunctionDefContext ctx) { 
+        isFunctionHeader = true;
+        defaultVariablesMap = localVariables; // change default variables map to local variables
+        System.err.println("enterFunctionDef");
+    }
+
+    @Override
+    public void exitFunctionInit(GLangParser.FunctionInitContext ctx){
+        System.err.println("exitFunctionInit");
+        String functionName = ctx.ID().getText();
+        String functionType = ctx.NUMTYPE().getText().toUpperCase();
+        //System.err.println("functionName: " + functionName);
+        //System.err.println("functionType: " + functionType);
+        if( functions.containsKey(functionName) ){
+            error(ctx.getStart().getLine(), "function "+functionName+" already defined");
+        }
+        FunctionObj functionObj = new FunctionObj(functionName, VarType.valueOf(functionType));
+        functions.put(functionName, functionObj);
+        currentFunction = functionName;
+    }
+
+    @Override
+    public void exitFunctionHeader(GLangParser.FunctionHeaderContext ctx) {
+        isFunctionHeader = false;
+        FunctionObj functionObj = null;
+        try{
+            functionObj = functions.get(currentFunction);
+        } catch (Exception e){
+            error(ctx.getStart().getLine(), "function "+currentFunction+" not defined");
+        }
+
+        
+        String functionType = functionObj.type.toString() == "INT" ? "i32" : "double";
+        List<String> argsTypes = functionObj.argsTypes.stream()
+            .map(x -> x.toString() == "INT" ? "i32" : "double").toList();
+        
+        List<String> argsName = functionObj.argsNames;
+
+        LLVMGenerator.declare_function(functionType, functionObj.name, argsTypes, argsName );
+    }
+
+    @Override
+    public void exitFunctionDef(GLangParser.FunctionDefContext ctx) { 
+        System.err.println("exitFunctionDef");
+        defaultVariablesMap = variables; // change default variables map to global variables
+        localVariables.clear();
+        currentFunction = "";
+
+        LLVMGenerator.end_function();
+    }
+
     @Override 
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
         //System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
+
+        
+
        if( ctx.ID() != null ){
          String ID = ctx.ID().getText();     
-         if( variables.containsKey(ID) ) {
-            Value v = variables.get( ID );
+         if( defaultVariablesMap.containsKey(ID) ) {
+            Value v = defaultVariablesMap.get( ID );
             if( v.type == VarType.INT ){
                LLVMGenerator.load_int( ID );
             }
@@ -93,12 +173,18 @@ public class LLVMActions extends GLangBaseListener {
     @Override
     public void exitValueINT(GLangParser.ValueINTContext ctx) { 
         //System.err.println("exitValueINT: " + ctx.INT().getText());
+        if(isFunctionHeader){
+            return;
+        }
         stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
     }
 
     @Override
     public void exitValueREAL(GLangParser.ValueREALContext ctx) { 
         //System.err.println("exitValueREAL: " + ctx.REAL().getText());
+        if(isFunctionHeader){
+            return;
+        }
         stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );
     }
 
@@ -114,12 +200,12 @@ public class LLVMActions extends GLangBaseListener {
             error(ctx.getStart().getLine(), "type mismatch: "+ NUMTYPE + " and " + v.type);
         }
 
-        if(NUMTYPE != null && variables.containsKey(ID)){
+        if(NUMTYPE != null && defaultVariablesMap.containsKey(ID)){
             error(ctx.getStart().getLine(), "variable already declared: "+ID);
         }
 
-       if( !variables.containsKey(ID) ) {
-          variables.put(ID, v);
+       if( !defaultVariablesMap.containsKey(ID) ) {
+          defaultVariablesMap.put(ID, v);
 
           if( v.type == VarType.INT ){
              LLVMGenerator.declare_int(ID);
@@ -141,10 +227,10 @@ public class LLVMActions extends GLangBaseListener {
         //System.err.println("exitAssign");
         String ID = ctx.ID().getText();
         Value v = stack.pop();
-        if( !variables.containsKey(ID) ) {
+        if( !defaultVariablesMap.containsKey(ID) ) {
             error(ctx.getStart().getLine(), "unknown variable: "+ID);
         }
-        Value v2 = variables.get(ID);
+        Value v2 = defaultVariablesMap.get(ID);
         if( v.type != v2.type ){
             error(ctx.getStart().getLine(), "type mismatch: "+ v2.type + " and " + v.type);
         }
@@ -163,12 +249,12 @@ public class LLVMActions extends GLangBaseListener {
  
         String NUM_TYPE = ctx.NUMTYPE().getText().toUpperCase();
  
-        if( variables.containsKey(ID) ) {
+        if( defaultVariablesMap.containsKey(ID) ) {
             error(ctx.getStart().getLine(), "variable already declared: "+ID);
         }
  
         Value v = new Value(ID, VarType.valueOf(NUM_TYPE), 0);
-        variables.put(ID, v);
+        defaultVariablesMap.put(ID, v);
  
         switch(VarType.valueOf(NUM_TYPE)){
             case INT:
@@ -188,8 +274,8 @@ public class LLVMActions extends GLangBaseListener {
     public void exitPrint(GLangParser.PrintContext ctx) { 
         //System.err.println("exitPrint");
         String ID = ctx.ID().getText();
-        if( variables.containsKey(ID) ) {
-          Value v = variables.get( ID );
+        if( defaultVariablesMap.containsKey(ID) ) {
+          Value v = defaultVariablesMap.get( ID );
           if( v.type != null ) {
              if( v.type == VarType.INT ){
                 LLVMGenerator.printf_int( ID );
@@ -207,11 +293,11 @@ public class LLVMActions extends GLangBaseListener {
     public void exitRead(GLangParser.ReadContext ctx) {
         //System.err.println("exitRead");
        String ID = ctx.ID().getText();
-       if( ! variables.containsKey(ID) ) {
+       if( ! defaultVariablesMap.containsKey(ID) ) {
         error(ctx.getStart().getLine(), "undeclared variable: " +ID);         
        } 
 
-       switch (variables.get(ID).type) {
+       switch (defaultVariablesMap.get(ID).type) {
            case INT:
                LLVMGenerator.scanf_int(ID);
                break;
@@ -219,7 +305,7 @@ public class LLVMActions extends GLangBaseListener {
                LLVMGenerator.scanf_real(ID);
                break;
            default:
-               error(ctx.getStart().getLine(), "unknown type: "+variables.get(ID).type);
+               error(ctx.getStart().getLine(), "unknown type: "+defaultVariablesMap.get(ID).type);
        }
     } 
 

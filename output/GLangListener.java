@@ -99,6 +99,26 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitFunctionParams(GLangParser.FunctionParamsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GLangParser#functionHeader}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionHeader(GLangParser.FunctionHeaderContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#functionHeader}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionHeader(GLangParser.FunctionHeaderContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GLangParser#functionInit}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionInit(GLangParser.FunctionInitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#functionInit}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionInit(GLangParser.FunctionInitContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code print}
 	 * labeled alternative in {@link GLangParser#semicolonStat}.
 	 * @param ctx the parse tree
@@ -180,16 +200,6 @@ public interface GLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionCall(GLangParser.FunctionCallContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GLangParser#functionCallParams}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunctionCallParams(GLangParser.FunctionCallParamsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GLangParser#functionCallParams}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunctionCallParams(GLangParser.FunctionCallParamsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GLangParser#returnStat}.
 	 * @param ctx the parse tree
