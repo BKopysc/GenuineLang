@@ -35,6 +35,20 @@ class LLVMGenerator {
       main_text = basic_text;
    }
 
+   static void create_return(String type, String value){
+      main_text += "ret "+type+" "+value+"\n";
+   }
+
+   static void call_function(String type, String name, List<String> argsTypes, List<String> argsNames){
+      String args = "";
+      for(int i=0; i<argsTypes.size(); i++){
+         args += argsTypes.get(i)+" %"+argsNames.get(i);
+         if( i < argsTypes.size()-1 ) args += ", ";
+      }
+      main_text += "%"+reg+" = call "+type+" @"+name+"("+args+")\n";
+      reg++;
+   }
+
     static void declare_int(String id){
       main_text += "%"+id+" = alloca i32\n";
    }

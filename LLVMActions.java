@@ -147,6 +147,88 @@ public class LLVMActions extends GLangBaseListener {
         LLVMGenerator.end_function();
     }
 
+    @Override
+    public void exitReturnStat(GLangParser.ReturnStatContext ctx) { 
+        System.err.println("exitReturnStat");
+        FunctionObj functionObj = null;
+        try{
+            functionObj = functions.get(currentFunction);
+        } catch (Exception e){
+            error(ctx.getStart().getLine(), "function "+currentFunction+" not defined");
+        }
+        
+        Value value = stack.pop();
+        if( value.type != functionObj.type ){
+            error(ctx.getStart().getLine(), "return type error");
+        }
+
+        String retType = value.type.toString() == "INT" ? "i32" : "double";
+
+        LLVMGenerator.create_return(retType, value.id);
+    }
+
+    @Override
+    public void exitFunctionParams(GLangParser.FunctionParamsContext ctx) { 
+        //System.err.println("exitFunctionParams");
+        List<String> argsName = ctx.ID().stream()
+            .map(x -> x.getText()).toList();
+        List<VarType> argsType = ctx.NUMTYPE().stream()
+            .map(x -> VarType.valueOf(x.getText().toUpperCase())).toList();
+
+        if( argsName.size() != argsType.size() ){
+            error(ctx.getStart().getLine(), "function params error");
+        }
+
+        for(int i=0; i<argsName.size(); i++){
+            Value valueTemp = new Value(argsName.get(i), argsType.get(i), 0);
+            defaultVariablesMap.put(valueTemp.id, valueTemp);
+        }
+
+        functions.get(currentFunction).argsTypes = argsType;
+        functions.get(currentFunction).argsNames = argsName;
+
+        //System.err.println("functionName: " + functionName);
+        //System.err.println("functionType: " + functionType);
+
+    }
+
+    @Override
+    public void exitFunctionCallExpression(GLangParser.FunctionCallExpressionContext ctx) {
+        String functionName = ctx.ID().getText();
+        FunctionObj functionObj = null;
+        try{
+            functionObj = functions.get(functionName);
+        } catch (RuntimeException e){
+            error(ctx.getStart().getLine(), "function "+functionName+" not defined");
+            return;
+        }
+
+        List<VarType> argsTypes = functionObj.argsTypes;
+        List<String> argsNames = functionObj.argsNames;
+
+        List<Value> args = new ArrayList<Value>();
+        for(int i=0; i<argsTypes.size(); i++){
+            if( stack.isEmpty() ){
+                error(ctx.getStart().getLine(), "function args error [stack]");
+            }
+            Value value = stack.pop();
+            if( value.type != argsTypes.get(i) ){
+                error(ctx.getStart().getLine(), "function args type error");
+            }
+            args.add(value);
+        }
+
+        String functionType = functionObj.type.toString() == "INT" ? "i32" : "double";
+
+        List<String> finalArgsTypes = args.stream()
+            .map(x -> x.type.toString() == "INT" ? "i32" : "double").toList();
+        List<String> finalArgsNames = args.stream()
+            .map(x -> x.id).toList();
+
+        LLVMGenerator.call_function(functionType, functionName, finalArgsTypes, finalArgsNames);
+        stack.push( new Value("%"+(LLVMGenerator.reg-1), functionObj.type, 0)); 
+    }
+
     @Override 
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
         //System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
