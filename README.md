@@ -12,14 +12,8 @@ Podstawowo:
 ## Część 2
 
 Podstawowo:
-- if/else ✅❌
-- pętla ✅❌
-- funkcje ❌
-- zmienne lokalne i globalne ❌
+- if/else ✅
+- pętla ✅
+- funkcje ✅
+- zmienne lokalne i globalne ✅
 
-
-Dodatkowo:
-- struktury
-- klasy
-- dynamiczne typowania
-- funkcje-generatory (yield)

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 enum VarType{
     INT,
@@ -99,12 +100,12 @@ public class LLVMActions extends GLangBaseListener {
     public void enterFunctionDef(GLangParser.FunctionDefContext ctx) { 
         isFunctionHeader = true;
         defaultVariablesMap = localVariables; // change default variables map to local variables
-        System.err.println("enterFunctionDef");
+        //System.err.println("enterFunctionDef");
     }
 
     @Override
     public void exitFunctionInit(GLangParser.FunctionInitContext ctx){
-        System.err.println("exitFunctionInit");
+        //System.err.println("exitFunctionInit");
         String functionName = ctx.ID().getText();
         String functionType = ctx.NUMTYPE().getText().toUpperCase();
         //System.err.println("functionName: " + functionName);
@@ -139,7 +140,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitFunctionDef(GLangParser.FunctionDefContext ctx) { 
-        System.err.println("exitFunctionDef");
+        //System.err.println("exitFunctionDef");
         defaultVariablesMap = variables; // change default variables map to global variables
         localVariables.clear();
         currentFunction = "";
@@ -149,7 +150,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitReturnStat(GLangParser.ReturnStatContext ctx) { 
-        System.err.println("exitReturnStat");
+        //System.err.println("exitReturnStat");
         FunctionObj functionObj = null;
         try{
             functionObj = functions.get(currentFunction);
@@ -215,7 +216,7 @@ public class LLVMActions extends GLangBaseListener {
             if( value.type != argsTypes.get(i) ){
                 error(ctx.getStart().getLine(), "function args type error");
             }
-            args.add(value);
+            args.add(0,value);
         }
 
         String functionType = functionObj.type.toString() == "INT" ? "i32" : "double";
@@ -233,7 +234,9 @@ public class LLVMActions extends GLangBaseListener {
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
         //System.err.println("exitValue: " + ctx.ID() + " " + ctx.getText());
 
-        
+        if(isFunctionHeader){
+            return;
+        }
 
        if( ctx.ID() != null ){
          String ID = ctx.ID().getText();     
@@ -468,7 +471,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitLessCondition(GLangParser.LessConditionContext ctx){
-        System.err.println("exitLessCondition");
+        //System.err.println("exitLessCondition");
         Value v2 = stack.pop();
         Value v1 = stack.pop();
         conditionCompare(v2, v1, ConditionType.LESS, ctx.getStart().getLine());
@@ -577,12 +580,12 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void enterSingleIf(GLangParser.SingleIfContext ctx){
-        System.err.println("enterSingleIf");
+        //System.err.println("enterSingleIf");
     }
 
     @Override
     public void exitSingleIf(GLangParser.SingleIfContext ctx){
-        System.err.println("exitSingleIf");
+        //System.err.println("exitSingleIf");
 
         BrCompareLabel brCompare = brCompareStack.pop();
         LLVMGenerator.single_br(brCompare.falseId);
@@ -591,7 +594,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void enterNestedElseBlock(GLangParser.NestedElseBlockContext ctx){
-        System.err.println("enterNestedElseBlock");
+        //System.err.println("enterNestedElseBlock");
         BrCompareLabel brCompare = brCompareStack.peek();
 
         LLVMGenerator.single_br(brCompare.extraId);
@@ -600,7 +603,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitIfElse(GLangParser.IfElseContext ctx){
-        System.err.println("exitIfElse");
+        //System.err.println("exitIfElse");
         BrCompareLabel brCompare = brCompareStack.pop();
         LLVMGenerator.single_br(brCompare.extraId);
         LLVMGenerator.create_label(brCompare.extraId);
@@ -609,7 +612,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void enterWhile(GLangParser.WhileContext ctx){
-        System.err.println("enterWhile");
+        //System.err.println("enterWhile");
         BrLabel brLabel = new BrLabel(Integer.toString(LLVMGenerator.reg-1));
         brStack.push(brLabel);
         LLVMGenerator.single_br(brLabel.targetId);
@@ -618,7 +621,7 @@ public class LLVMActions extends GLangBaseListener {
 
     @Override
     public void exitWhile(GLangParser.WhileContext ctx){
-        System.err.println("exitWhile");
+        //System.err.println("exitWhile");
         BrLabel brLabel = brStack.pop();
         LLVMGenerator.single_br(brLabel.targetId);
         BrCompareLabel brCompare = brCompareStack.pop();

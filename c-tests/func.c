@@ -1,8 +1,7 @@
 #include <stdio.h>
 
 int test(int a, int b){
-    int c=a+b;
-    return c;
+    return 5;
 }
 
 int main(){
