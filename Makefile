@@ -19,6 +19,11 @@ compile:
 test:
 	java -cp $(ANTLR):output:. Main $(TEST_FILE) > $(TEST_OUT)
 	lli test.ll
+	
+
+run-ll: 
+	java -cp $(ANTLR):output:. Main $(INPUT) > $(basename $(INPUT)).ll
+	lli $(basename $(INPUT)).ll
 
 clean:
 	rm -f *.class

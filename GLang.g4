@@ -39,7 +39,7 @@ functionInit: NUMTYPE ID
     ;
 
 semicolonStat: PRINT ID         #print
-    | ID functionCall              #call
+    | ID functionCall              #singleCall
 	| NUMTYPE ID ASSIGN expr #assignNew
 	| ID ASSIGN expr            #assign
     | NUMTYPE ID             #declare
@@ -79,9 +79,9 @@ condition: expr EQUAL expr #equalCondition
 
 expr: value #singleExpression
     | value ADD expr #addExpression
+	| value SUBTRACT expr #subtractExpression
     | value MULTIPLY expr #multiplyExpression
-    | value SUBTRACT expr #subtractExpression
-    | value DIVIDE expr #divideExpression
+	| value DIVIDE expr #divideExpression
     | ID functionCall #functionCallExpression
     ;
 

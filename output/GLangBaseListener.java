@@ -160,13 +160,13 @@ public class GLangBaseListener implements GLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCall(GLangParser.CallContext ctx) { }
+	@Override public void enterSingleCall(GLangParser.SingleCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCall(GLangParser.CallContext ctx) { }
+	@Override public void exitSingleCall(GLangParser.SingleCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -412,18 +412,6 @@ public class GLangBaseListener implements GLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSubtractExpression(GLangParser.SubtractExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -431,6 +419,18 @@ public class GLangBaseListener implements GLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSubtractExpression(GLangParser.SubtractExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

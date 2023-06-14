@@ -797,22 +797,6 @@ public class GLangParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class CallContext extends SemicolonStatContext {
-		public TerminalNode ID() { return getToken(GLangParser.ID, 0); }
-		public FunctionCallContext functionCall() {
-			return getRuleContext(FunctionCallContext.class,0);
-		}
-		public CallContext(SemicolonStatContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof GLangListener ) ((GLangListener)listener).enterCall(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof GLangListener ) ((GLangListener)listener).exitCall(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class PrintContext extends SemicolonStatContext {
 		public TerminalNode PRINT() { return getToken(GLangParser.PRINT, 0); }
 		public TerminalNode ID() { return getToken(GLangParser.ID, 0); }
@@ -852,6 +836,22 @@ public class GLangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof GLangListener ) ((GLangListener)listener).exitDeclare(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class SingleCallContext extends SemicolonStatContext {
+		public TerminalNode ID() { return getToken(GLangParser.ID, 0); }
+		public FunctionCallContext functionCall() {
+			return getRuleContext(FunctionCallContext.class,0);
+		}
+		public SingleCallContext(SemicolonStatContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof GLangListener ) ((GLangListener)listener).enterSingleCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof GLangListener ) ((GLangListener)listener).exitSingleCall(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -908,7 +908,7 @@ public class GLangParser extends Parser {
 				}
 				break;
 			case 2:
-				_localctx = new CallContext(_localctx);
+				_localctx = new SingleCallContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(117);
@@ -1744,25 +1744,25 @@ public class GLangParser extends Parser {
 				}
 				break;
 			case 3:
-				_localctx = new MultiplyExpressionContext(_localctx);
+				_localctx = new SubtractExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(209);
 				value();
 				setState(210);
-				match(MULTIPLY);
+				match(SUBTRACT);
 				setState(211);
 				expr();
 				}
 				break;
 			case 4:
-				_localctx = new SubtractExpressionContext(_localctx);
+				_localctx = new MultiplyExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(213);
 				value();
 				setState(214);
-				match(SUBTRACT);
+				match(MULTIPLY);
 				setState(215);
 				expr();
 				}
@@ -2028,9 +2028,9 @@ public class GLangParser extends Parser {
 		"\u00ca\u00c6\u0001\u0000\u0000\u0000\u00cb%\u0001\u0000\u0000\u0000\u00cc"+
 		"\u00e0\u0003(\u0014\u0000\u00cd\u00ce\u0003(\u0014\u0000\u00ce\u00cf\u0005"+
 		"\u001a\u0000\u0000\u00cf\u00d0\u0003&\u0013\u0000\u00d0\u00e0\u0001\u0000"+
-		"\u0000\u0000\u00d1\u00d2\u0003(\u0014\u0000\u00d2\u00d3\u0005\u001b\u0000"+
+		"\u0000\u0000\u00d1\u00d2\u0003(\u0014\u0000\u00d2\u00d3\u0005\u001c\u0000"+
 		"\u0000\u00d3\u00d4\u0003&\u0013\u0000\u00d4\u00e0\u0001\u0000\u0000\u0000"+
-		"\u00d5\u00d6\u0003(\u0014\u0000\u00d6\u00d7\u0005\u001c\u0000\u0000\u00d7"+
+		"\u00d5\u00d6\u0003(\u0014\u0000\u00d6\u00d7\u0005\u001b\u0000\u0000\u00d7"+
 		"\u00d8\u0003&\u0013\u0000\u00d8\u00e0\u0001\u0000\u0000\u0000\u00d9\u00da"+
 		"\u0003(\u0014\u0000\u00da\u00db\u0005\u001d\u0000\u0000\u00db\u00dc\u0003"+
 		"&\u0013\u0000\u00dc\u00e0\u0001\u0000\u0000\u0000\u00dd\u00de\u0005\u0015"+

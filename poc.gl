@@ -1,0 +1,47 @@
+
+int a;
+read a;
+
+int b;
+read b;
+
+int power;
+read power;
+
+function int loopIncresase(int a, int b) do
+	int c = a;
+	while c < b do
+		print c;
+		c = c + 1;
+	end
+	return 0;
+end
+
+function int loopDecrease(int a, int b) do
+	int c = a;
+	while c > b do
+		print c;
+		c = c - 1;
+	end
+	return 0;
+end
+
+function int simplePower(int a, int c) do
+	int res = 1;
+	int ctr = 1;
+	while ctr <= c do
+		res = res * a;
+		ctr = ctr + 1;
+	end
+	return res;
+end 
+
+if a>b do
+	loopDecrease(a,b);
+else
+	loopIncresase(a,b);
+end
+	
+int pow = simplePower(a,power);
+
+print pow;

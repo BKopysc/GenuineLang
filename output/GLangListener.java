@@ -131,17 +131,17 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitPrint(GLangParser.PrintContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code call}
+	 * Enter a parse tree produced by the {@code singleCall}
 	 * labeled alternative in {@link GLangParser#semicolonStat}.
 	 * @param ctx the parse tree
 	 */
-	void enterCall(GLangParser.CallContext ctx);
+	void enterSingleCall(GLangParser.SingleCallContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code call}
+	 * Exit a parse tree produced by the {@code singleCall}
 	 * labeled alternative in {@link GLangParser#semicolonStat}.
 	 * @param ctx the parse tree
 	 */
-	void exitCall(GLangParser.CallContext ctx);
+	void exitSingleCall(GLangParser.SingleCallContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code assignNew}
 	 * labeled alternative in {@link GLangParser#semicolonStat}.
@@ -375,18 +375,6 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitAddExpression(GLangParser.AddExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code multiplyExpression}
-	 * labeled alternative in {@link GLangParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code multiplyExpression}
-	 * labeled alternative in {@link GLangParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code subtractExpression}
 	 * labeled alternative in {@link GLangParser#expr}.
 	 * @param ctx the parse tree
@@ -398,6 +386,18 @@ public interface GLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSubtractExpression(GLangParser.SubtractExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multiplyExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiplyExpression}
+	 * labeled alternative in {@link GLangParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplyExpression(GLangParser.MultiplyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code divideExpression}
 	 * labeled alternative in {@link GLangParser#expr}.

@@ -194,6 +194,43 @@ public class LLVMActions extends GLangBaseListener {
     }
 
     @Override
+    public void exitSingleCall(GLangParser.SingleCallContext ctx) { 
+        String functionName = ctx.ID().getText();
+        FunctionObj functionObj = null;
+        try{
+            functionObj = functions.get(functionName);
+        } catch (RuntimeException e){
+            error(ctx.getStart().getLine(), "function "+functionName+" not defined");
+            return;
+        }
+
+        List<VarType> argsTypes = functionObj.argsTypes;
+        List<String> argsNames = functionObj.argsNames;
+
+        List<Value> args = new ArrayList<Value>();
+        for(int i=0; i<argsTypes.size(); i++){
+            if( stack.isEmpty() ){
+                error(ctx.getStart().getLine(), "function args error [stack]");
+            }
+            Value value = stack.pop();
+            if( value.type != argsTypes.get(i) ){
+                error(ctx.getStart().getLine(), "function args type error");
+            }
+            args.add(0,value);
+        }
+
+                List<String> finalArgsTypes = args.stream()
+            .map(x -> x.type.toString() == "INT" ? "i32" : "double").toList();
+        List<String> finalArgsNames = args.stream()
+            .map(x -> x.id).toList();
+
+        String functionType = functionObj.type.toString() == "INT" ? "i32" : "double";
+        LLVMGenerator.call_function(functionType, functionName, finalArgsTypes, finalArgsNames);
+        //Value functionCallValue = new Value(functionCallId, functionObj.type, 0);
+        
+    }
+
+    @Override
     public void exitFunctionCallExpression(GLangParser.FunctionCallExpressionContext ctx) {
         String functionName = ctx.ID().getText();
         FunctionObj functionObj = null;
