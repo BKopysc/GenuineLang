@@ -81,6 +81,7 @@ class LLVMGenerator {
        reg++;
    }
 
+// arithmetic operations
     static void add_i32(String val1, String val2){
       main_text += "%"+reg+" = add i32 "+val1+", "+val2+"\n";
       reg++;
@@ -121,15 +122,39 @@ class LLVMGenerator {
       reg++;
    }
 
+// i32 conditionals
+
    static void less_i32(String val1, String val2){
       main_text += "%"+reg+" = icmp slt i32 "+val1+", "+val2+"\n";
       reg++;
    }
 
-   static void less_real(String val1, String val2){
-      main_text += "%"+reg+" = fcmp olt double "+val1+", "+val2+"\n";
+   static void less_equal_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp sle i32 "+val1+", "+val2+"\n";
       reg++;
    }
+
+   static void greater_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp sgt i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void greater_equal_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp sge i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void equal_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp eq i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   static void not_equal_i32(String val1, String val2){
+      main_text += "%"+reg+" = icmp ne i32 "+val1+", "+val2+"\n";
+      reg++;
+   }
+
+   // boolean compare utils
 
    static void br_compare(String compareVal, String trueVal, String endVal){
       main_text += "br i1 "+compareVal+", label %"+trueVal+", label %"+endVal+"\n";
@@ -142,6 +167,8 @@ class LLVMGenerator {
    static void single_br(String label){
       main_text += "br label %"+label+"\n";
    }
+
+   //generate code
  
     static String generate(){
       String text = "";
