@@ -3,12 +3,6 @@
  * It will be called by the main class.
  */
 
-// enum VarType{
-//     INT,
-//     REAL,
-//     UNKNOWN
-// }
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -27,18 +21,14 @@ class LLVMGenerator {
     static TextObject functions_text = new TextObject("");
    private static List<Integer> func_args = new ArrayList<>();
     static int reg = 1;
-    static int before_reg = 0;
-
-    static void clear_reg(){
-      reg = 1;
-    }
+    static int temp_reg = 0;
 
     static void save_reg(){
-      before_reg = reg;
+      temp_reg = reg;
     }
 
     static void restore_reg(){
-      reg = before_reg;
+      reg = temp_reg;
     }
 
     static void reg_to_zero(){
@@ -84,12 +74,6 @@ class LLVMGenerator {
    }
 
    private static void load_function_args(List<String> argsTypes, List<String> argsNames){
-      //List<Integer> temp_regs = new ArrayList<>();
-      // for(String type : argsTypes){
-      //    main_text.str += "%"+reg+" = alloca "+type+"\n";
-      //    temp_regs.add(reg);
-      //    reg++;
-      // }
 
       for(int i = 0; i < argsTypes.size(); i++){
          main_text.str += "%"+argsNames.get(i)+" = alloca "+argsTypes.get(i)+"\n";
