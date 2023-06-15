@@ -72,7 +72,8 @@ print pow;
 ```
 
 ### Console output
-![image](https://github.com/BKopysc/GenuineLang/assets/57834846/013951a5-ecc0-41e1-bb5b-a440e6d7ef22)
+![image](https://github.com/BKopysc/GenuineLang/assets/57834846/6565c0fd-8fda-4487-b3a3-d69eae64a6a5)
+
 
 ## Run yourself
 1. You need:
