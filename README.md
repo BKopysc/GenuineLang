@@ -79,7 +79,7 @@ print pow;
 - Clang and lli tool
 
 2. Create compiler: ```make generate compile```
-3. Run .gl file: ```make run-ll INPUT="./simple.gl"```
+3. Run .gl file: ```make run-ll INPUT="./poc.gl"```
 
 
 
