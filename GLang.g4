@@ -55,7 +55,10 @@ functionCall: '(' (expr (',' expr)*)?  ')'
 returnStat: 'return' value ';' NEWLINE
 ;
 
-instructionStat: IF_OP ifCondition DO_OP nestedBlock END_OP #singleIf
+instructionStat: instructionStatChild
+    ;
+
+instructionStatChild: IF_OP ifCondition DO_OP nestedBlock END_OP #singleIf
      | IF_OP ifCondition DO_OP nestedBlock ELSE_OP elseBlock END_OP #ifElse
      | WHILE_OP elseCondition DO_OP nestedBlock END_OP #while
     ;

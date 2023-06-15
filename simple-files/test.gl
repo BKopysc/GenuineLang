@@ -1,8 +1,11 @@
-
 int a=3;
 
+int z;
+
 if a==2 do
-    int z = 5;
+    z = 5;
+else
+    z = 6;
 end
 
 print z;

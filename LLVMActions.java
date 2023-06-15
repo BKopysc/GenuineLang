@@ -86,6 +86,7 @@ public class LLVMActions extends GLangBaseListener {
 
     String currentFunction = "";
     boolean isFunctionHeader = false;
+    boolean isInstructionBlock = false;
     
 
     @Override
@@ -247,6 +248,16 @@ public class LLVMActions extends GLangBaseListener {
         stack.push( new Value("%"+(LLVMGenerator.reg-1), functionObj.type, 0)); 
     }
 
+    @Override
+    public void enterInstructionStat(GLangParser.InstructionStatContext ctx){
+        isInstructionBlock = true;
+    }
+
+    @Override
+    public void exitInstructionStat(GLangParser.InstructionStatContext ctx){
+        isInstructionBlock = false;
+    }
+
     @Override 
     public void exitValueID(GLangParser.ValueIDContext ctx) { 
         if(isFunctionHeader){
@@ -275,6 +286,7 @@ public class LLVMActions extends GLangBaseListener {
         if(isFunctionHeader){
             return;
         }
+
         stack.push( new Value(ctx.INT().getText(), VarType.INT, 0) );
     }
 
@@ -283,6 +295,7 @@ public class LLVMActions extends GLangBaseListener {
         if(isFunctionHeader){
             return;
         }
+
         stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );
     }
 
@@ -292,6 +305,11 @@ public class LLVMActions extends GLangBaseListener {
        String NUMTYPE = ctx.NUMTYPE().getText().toUpperCase();
 
        Value v = stack.pop();
+
+        if(isInstructionBlock){
+            error(ctx.getStart().getLine(), "declare inside instruction block is not allowed");
+            return;
+        }
 
         if( !v.type.toString().equals(NUMTYPE) ){
             error(ctx.getStart().getLine(), "type mismatch: "+ NUMTYPE + " and " + v.type);
@@ -619,6 +637,12 @@ public class LLVMActions extends GLangBaseListener {
         LLVMGenerator.single_br(brLabel.targetId);
         BrCompareLabel brCompare = brCompareStack.pop();
         LLVMGenerator.create_label(brCompare.falseId);
+    }
+
+    @Override 
+    public void exitProgram(GLangParser.ProgramContext ctx) { 
+
+       System.out.println( LLVMGenerator.generate() );
     }
  
     void error(int line, String msg){

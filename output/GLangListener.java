@@ -211,38 +211,48 @@ public interface GLangListener extends ParseTreeListener {
 	 */
 	void exitReturnStat(GLangParser.ReturnStatContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GLangParser#instructionStat}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstructionStat(GLangParser.InstructionStatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GLangParser#instructionStat}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstructionStat(GLangParser.InstructionStatContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code singleIf}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void enterSingleIf(GLangParser.SingleIfContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code singleIf}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void exitSingleIf(GLangParser.SingleIfContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ifElse}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void enterIfElse(GLangParser.IfElseContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code ifElse}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void exitIfElse(GLangParser.IfElseContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code while}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void enterWhile(GLangParser.WhileContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code while}
-	 * labeled alternative in {@link GLangParser#instructionStat}.
+	 * labeled alternative in {@link GLangParser#instructionStatChild}.
 	 * @param ctx the parse tree
 	 */
 	void exitWhile(GLangParser.WhileContext ctx);
