@@ -9,6 +9,7 @@ int power;
 read power;
 
 function int loopIncresase(int a, int b) do
+	print power;
 	int c = a;
 	while c < b do
 		print c;

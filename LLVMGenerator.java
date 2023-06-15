@@ -3,15 +3,10 @@
  * It will be called by the main class.
  */
 
-// enum VarType{
-//     INT,
-//     REAL,
-//     UNKNOWN
-// }
-
 import java.util.List;
 import java.util.ArrayList;
 
+// Object to store the text of the LLVM code
 class TextObject{
     String str;
     TextObject(String text){
@@ -19,34 +14,32 @@ class TextObject{
     }
 }
 
-
+// Generator class
 class LLVMGenerator {
     
     static String header_text = "";
-    static TextObject basic_text = new TextObject("");
-    static TextObject functions_text = new TextObject("");
-   private static List<Integer> func_args = new ArrayList<>();
-    static int reg = 1;
-    static int before_reg = 0;
+    static TextObject basic_text = new TextObject(""); // default text context
+    static TextObject functions_text = new TextObject(""); // functions text context
+   private static List<Integer> func_args = new ArrayList<>(); // temp list to store function args
+    static int reg = 1; // register counter
+    static int temp_reg = 0; // temp register counter to store the value of reg
+    private static TextObject main_text = basic_text; // text context to be used
 
-    static void clear_reg(){
-      reg = 1;
-    }
-
+// register methods
     static void save_reg(){
-      before_reg = reg;
+      temp_reg = reg;
     }
 
     static void restore_reg(){
-      reg = before_reg;
+      reg = temp_reg;
     }
 
     static void reg_to_zero(){
       reg = 0;
     }
 
-    private static TextObject main_text = basic_text;
 
+// functions methods
    static void declare_function(String type, String name, List<String> argsTypes, List<String> argsNames){
       save_reg();
       reg_to_zero();
@@ -84,12 +77,6 @@ class LLVMGenerator {
    }
 
    private static void load_function_args(List<String> argsTypes, List<String> argsNames){
-      //List<Integer> temp_regs = new ArrayList<>();
-      // for(String type : argsTypes){
-      //    main_text.str += "%"+reg+" = alloca "+type+"\n";
-      //    temp_regs.add(reg);
-      //    reg++;
-      // }
 
       for(int i = 0; i < argsTypes.size(); i++){
          main_text.str += "%"+argsNames.get(i)+" = alloca "+argsTypes.get(i)+"\n";
@@ -102,6 +89,7 @@ class LLVMGenerator {
       func_args.clear();
    }
 
+// basic methods
     static void declare_int(String id){
       main_text.str += "%"+id+" = alloca i32\n";
    }
@@ -296,7 +284,7 @@ class LLVMGenerator {
       text += "declare i32 @printf(i8*, ...)\n";
       text += "declare i32 @__isoc99_scanf(i8*, ...)\n";
       text += header_text;
-      text += "define i32 @main() nounwind{\n";
+      text += "\ndefine i32 @main() nounwind{\n";
       text += basic_text.str;
       text += "ret i32 0 }\n\n";
 
