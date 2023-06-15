@@ -2,6 +2,8 @@
 
 Homemade language and compilator created from scratch for Computer Science project.
 
+Tech stack: ANTLR, Java, LLVM
+
 ## Language progress:
 - variables: int, real ✅
 - read, print ✅
