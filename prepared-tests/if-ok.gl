@@ -1,0 +1,11 @@
+
+int a;
+read a;
+int ok=0;
+int fal=1;
+
+if a == 5 do
+    print ok;
+else
+    print fal;
+end

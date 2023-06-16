@@ -1,0 +1,7 @@
+function int printer() do
+    int a = 12345;
+    print a;
+    return 0;
+end
+
+printer();

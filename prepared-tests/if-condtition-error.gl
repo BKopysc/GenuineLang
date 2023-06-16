@@ -1,0 +1,5 @@
+int a = 10;
+
+if a >> 5 do
+    print "ok"
+end

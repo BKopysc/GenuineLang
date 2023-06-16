@@ -1,0 +1,8 @@
+
+function test(int a) do
+    int b = a+2;
+    print b;
+    return 0;
+end
+
+int c = test(2);

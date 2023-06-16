@@ -1,0 +1,4 @@
+
+if b < 3 do
+    print b;
+end
